@@ -17,62 +17,59 @@ def get_outputfile_name(inputname):
     # return os.path.join(outputDirName, outputname)
 
 def write2lua(filekey, f, row, i, keysArr, typesArr):
-    print 'write begin', i, row, len(row)
-    newDefine = False
-    if row[0] != "":
-        gl.name = row[0]
-        gl.level = 1
-        newDefine = True
-    if newDefine:
-        f.writelines(filekey + "." + gl.name + " = {\n")
+    try:
+        print 'write begin', i, row, len(row), gl.level
+        newDefine = False
+        if row[0] != "":
+            gl.name = row[0]
+            gl.level = 1
+            newDefine = True
+        if newDefine:
+            f.writelines(filekey + "." + gl.name + " = {\n")
+            for index, item in enumerate(row):
+                if index >= 1:
+                    k = keysArr[index]
+                    t = typesArr[index].lower()
+                    print '!!!!!!!!!!!!!!!!!!!'
+                    print t, k
+                    if t == "number":
+                        if item == "":
+                            f.writelines("    " + k + " = " + "0,\n")
+                        else:
+                            f.writelines("    " + k + " = " + item + ",\n")
+                    elif t == "bool":
+                        if item == "":
+                            f.writelines("    " + k + " = " + "false,\n")
+                        else:
+                            f.writelines("    " + k + " = " + item.lower() + ",\n")
+                    elif t == "string":
+                        f.writelines("    " + k + ' = "' + item + '",\n' )
+                    else:
+                        print 'Error, unsupport type: ', t
+                        return
+            f.writelines("}\n\n")
+
+        f.writelines(filekey + "." + gl.name + "[" + str(gl.level) + "] = {\n")
         for index, item in enumerate(row):
+            if item == "":
+                continue
             if index >= 1:
                 k = keysArr[index]
                 t = typesArr[index].lower()
                 if t == "number":
-                    if item == "":
-                        f.writelines("    " + k + " = " + "0,\n")
-                    else:
-                        f.writelines("    " + k + " = " + item + ",\n")
+                    f.writelines("    " + k + " = " + item + ",\n")
                 elif t == "bool":
-                    if item == "":
-                        f.writelines("    " + k + " = " + "false,\n")
-                    else:
-                        f.writelines("    " + k + " = " + item.lower() + ",\n")
+                    f.writelines("    " + k + " = " + item.lower() + ",\n")
                 elif t == "string":
                     f.writelines("    " + k + ' = "' + item + '",\n' )
                 else:
-                    print 'Error, unsupport type: ', t
+                    print 'Error, unsuppurt type: ', t
                     return
+
         f.writelines("}\n\n")
-
-    print 'why222222'
-    f.wirtelines("why22222222\n")
-    print 'why33333333'
-    f.writelines(filekey + "." + gl.name + "[" + gl.level + "] = {\n")
-    print 'why4!!!!!!!!!!!!!!!!!!!!!!!!!'
-    for index, item in enumerate(row):
-        if index >= 1:
-            k = keysArr[index]
-            t = typesArr[index].lower()
-            if t == "int":
-                if item == "":
-                    f.writelines("    " + k + " = " + "0,\n")
-                else:
-                    f.writelines("    " + k + " = " + item + ",\n")
-            elif t == "bool":
-                if item == "":
-                    f.writelines("    " + k + " = " + "false,\n")
-                else:
-                    f.writelines("    " + k + " = " + item.lower() + ",\n")
-            elif t == "string":
-                f.writelines("    " + k + ' = "' + item + '",\n' )
-            else:
-                print 'Error, unsuppurt type: ', t
-            return
-
-    f.writelines("}\n\n")
-    gl.level += 1
+        gl.level += 1
+    except ExceptionType, Argument:
+        print ExceptionType, Argument
 
 def convert2lua(inputname):
     try:
@@ -112,7 +109,8 @@ def convert2lua(inputname):
                     continue
 
                 write2lua(filekey, f, row, i, gl.keysArr, gl.typesArr)
-    except:
+    except ExceptionType, Argument:
+        print ExceptionType, Argument
         print 'Error, fail convert:', inputname
         print
 
