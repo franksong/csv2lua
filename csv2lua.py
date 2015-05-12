@@ -46,11 +46,11 @@ def write2lua(filekey, f, row, i, keysArr, typesArr):
                     return
         f.writelines("}\n\n")
 
-    f.writelines("why!!!!!!!!!!!!!!!!!\n\n")
     print 'why222222'
-    f.wirtelines("why22222222")
-    f.writelines(filekey + "." + gl.name + "\[" + gl.level + "\] = {\n")
-    print 'why2!!!!!!!!!!!!!!!!!!!!!!!!!'
+    f.wirtelines("why22222222\n")
+    print 'why33333333'
+    f.writelines(filekey + "." + gl.name + "[" + gl.level + "] = {\n")
+    print 'why4!!!!!!!!!!!!!!!!!!!!!!!!!'
     for index, item in enumerate(row):
         if index >= 1:
             k = keysArr[index]
@@ -98,18 +98,12 @@ def convert2lua(inputname):
                     print 'Error, len(row) <= 0', inputname, i
                     return
                 if i == gl.keyLine:
-                    print '11111'
                     gl.keysArr = row
                     continue
                 if i == gl.typeLine:
-                    print '22222'
                     gl.typesArr = row
                     continue
                 if i >= gl.defineLine:
-                    print i, gl.defineLine
-                    print len(gl.keysArr), len(gl.typesArr)
-                    print "main: ", i, gl.keysArr, gl.typesArr
-                    print
                     if len(gl.keysArr) <= 0 or len(gl.typesArr) <= 0:
                         print 'Error, no keysArr or typesArr', i, gl.keysArr, gl.typesArr
                         return

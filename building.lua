@@ -11,5 +11,3 @@ building.house = {
     defense = 100,
 }
 
-why!!!!!!!!!!!!!!!!!
-
