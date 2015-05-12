@@ -8,12 +8,13 @@ typesArr = []
 defineLine = 3                  # >= 3
 
 typeInt = "int"
-typeBool = "boolean"
+typeBool = "bool"
 typeStr = "string"
 
-inputDir = ""                  # *.csv
+#inputDir = "../../dpsg/game/designer"                  # *.csv
+inputDir = ""
 inputEnds = ".csv"
-outputDir = ""                 # *.lua
+outputDir = "luascript/"                 # *.lua
 outputEnds = ".lua"
 
 name = ""

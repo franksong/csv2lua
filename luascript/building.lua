@@ -7,12 +7,23 @@ local building = {}
 building.house = {
     use_money = 1000,
     use_food = 123,
+    is_init = true,
+    defense = 100,
+}
+
 building.house[1] = {
+    use_money = 1000,
+    use_food = 123,
+    is_init = true,
+    defense = 100,
+}
+
+building.house[2] = {
     use_money = 123,
     defense = 120,
 }
 
-building.house[2] = {
+building.house[3] = {
     use_money = 456,
     defense = 130,
 }
@@ -20,8 +31,15 @@ building.house[2] = {
 building.farm = {
     use_money = 100,
     use_food = 234,
+    is_init = false,
+    defense = 200,
+}
+
 building.farm[1] = {
-    use_money = 200,
+    use_money = 100,
+    use_food = 234,
+    is_init = false,
+    defense = 200,
 }
 
 building.farm[2] = {
@@ -29,6 +47,10 @@ building.farm[2] = {
 }
 
 building.farm[3] = {
+    use_money = 200,
+}
+
+building.farm[4] = {
 }
 
 building.all_type = {}
