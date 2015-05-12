@@ -5,7 +5,11 @@ keyLine = 1                     # csv file keys line
 keysArr = []
 typeLine = 2                    # csv file types line - string bool int
 typesArr = []
-defineLine = 4                  # >= 3
+defineLine = 3                  # >= 3
+
+typeInt = "int"
+typeBool = "boolean"
+typeStr = "string"
 
 inputDir = ""                  # *.csv
 inputEnds = ".csv"

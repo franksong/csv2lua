@@ -18,7 +18,6 @@ def get_outputfile_name(inputname):
 
 def write2lua(filekey, f, row, i, keysArr, typesArr):
     try:
-        print 'write begin', i, row, len(row), gl.level
         newDefine = False
         if row[0] != "":
             gl.name = row[0]
@@ -30,22 +29,20 @@ def write2lua(filekey, f, row, i, keysArr, typesArr):
                 if index >= 1:
                     k = keysArr[index]
                     t = typesArr[index].lower()
-                    print '!!!!!!!!!!!!!!!!!!!'
-                    print t, k
-                    if t == "number":
+                    if t == gl.typeInt:
                         if item == "":
                             f.writelines("    " + k + " = " + "0,\n")
                         else:
                             f.writelines("    " + k + " = " + item + ",\n")
-                    elif t == "bool":
+                    elif t == gl.typeBool:
                         if item == "":
                             f.writelines("    " + k + " = " + "false,\n")
                         else:
                             f.writelines("    " + k + " = " + item.lower() + ",\n")
-                    elif t == "string":
+                    elif t == gl.typeStr:
                         f.writelines("    " + k + ' = "' + item + '",\n' )
                     else:
-                        print 'Error, unsupport type: ', t
+                        print 'Error, unsupport type: ', t, filekey
                         return
             f.writelines("}\n\n")
 
@@ -56,20 +53,20 @@ def write2lua(filekey, f, row, i, keysArr, typesArr):
             if index >= 1:
                 k = keysArr[index]
                 t = typesArr[index].lower()
-                if t == "number":
+                if t == gl.typeInt:
                     f.writelines("    " + k + " = " + item + ",\n")
-                elif t == "bool":
+                elif t == gl.typeBool:
                     f.writelines("    " + k + " = " + item.lower() + ",\n")
-                elif t == "string":
+                elif t == gl.typeStr:
                     f.writelines("    " + k + ' = "' + item + '",\n' )
                 else:
-                    print 'Error, unsuppurt type: ', t
+                    print 'Error, unsuppurt type: ', t, filekey
                     return
 
         f.writelines("}\n\n")
         gl.level += 1
-    except ExceptionType, Argument:
-        print ExceptionType, Argument
+    except Exception, e:
+        print Exception, e
 
 def convert2lua(inputname):
     try:
@@ -78,9 +75,7 @@ def convert2lua(inputname):
 
             print "write start"
             tempkey = inputname[:-4]
-            print tempkey, inputname
             outputname = get_outputfile_name(tempkey)
-            print 'outputname: ', outputname
             filekey = str.split(tempkey, "/")[-1]
             print outputname, filekey
             f = open(outputname, "w")
@@ -88,9 +83,9 @@ def convert2lua(inputname):
             f.writelines("local " + filekey + " = {}\n\n")
 
             i = 0
+            allType = []
             for row in reader:
                 i += 1
-                print i, gl.keyLine, gl.typeLine, gl.defineLine
                 if len(row) <= 0:
                     print 'Error, len(row) <= 0', inputname, i
                     return
@@ -104,13 +99,28 @@ def convert2lua(inputname):
                     if len(gl.keysArr) <= 0 or len(gl.typesArr) <= 0:
                         print 'Error, no keysArr or typesArr', i, gl.keysArr, gl.typesArr
                         return
-                else:
-                    print "else, ", i
-                    continue
-
+                    if row[0] != "":
+                        allType.append(row[0])
                 write2lua(filekey, f, row, i, gl.keysArr, gl.typesArr)
-    except ExceptionType, Argument:
-        print ExceptionType, Argument
+
+            f.writelines(filekey + ".all_type = {}\n")
+            f.writelines("local all_type = " + filekey + ".all_type\n")
+            for index, item in enumerate(allType):
+                f.writelines("all_type[" + str(index+1) + "] = " + item + "\n")
+            f.writelines("\nfor i = 1, #(" + filekey + ".all_type) do\n")
+            f.writelines("    local item = " + filekey + ".all_type[i]\n")
+            f.writelines("    for j = 1, #item do\n")
+            f.writelines("        item[j].__index = item[j]\n")
+            f.writelines("        if j < #item then\n")
+            f.writelines("            setmetatable(item[j+1], item[j])\n")
+            f.writelines("        end\n")
+            f.writelines("    end\n")
+            f.writelines("end\n\n\n")
+            f.writelines("return " + filekey)
+
+            f.close()
+    except Exception, e:
+        print Exception, e
         print 'Error, fail convert:', inputname
         print
 
