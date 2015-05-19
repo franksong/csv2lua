@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 keyLine = 1                     # csv file keys line
@@ -11,7 +11,7 @@ typeInt = "int"
 typeBool = "bool"
 typeStr = "string"
 
-#inputDir = "../../dpsg/game/designer"                  # *.csv
+# inputDir = "../../dpsg/game/designer"                  # *.csv
 inputDir = ""
 inputEnds = ".csv"
 outputDir = "luascript/"                 # *.lua
